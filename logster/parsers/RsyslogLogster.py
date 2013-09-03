@@ -33,10 +33,13 @@ class RsyslogLogster(LogsterParser):
             regMatch = re.match(line)
 
             if regMatch:
-                self.values['size'] = regMatch[0]
-                self.values['enqueued'] = regMatch[1]
-                self.values['full'] = regMatch[2]
-                self.values['maxqsize'] = regMatch[3]
+                match = regMatch.groups()
+                self.values['size'] = match[0]
+                self.values['enqueued'] = match[1]
+                self.values['full'] = match[2]
+                self.values['maxqsize'] = match[3]
+            else:
+                raise "No match"
 
         except Exception, e:
             raise LogsterParsingException, "regmatch or contents failed with %s" % e
@@ -48,4 +51,4 @@ class RsyslogLogster(LogsterParser):
 
         # Return a list of metrics objects
 
-       return [ MetricObject(name, value, "None") for (name,value) in self.values.items() if value]
+        return [ MetricObject(name, value, "None") for (name,value) in self.values.items() if value > 0]

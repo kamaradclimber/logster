@@ -16,10 +16,7 @@ class RsyslogLogster(LogsterParser):
     def __init__(self, option_string=None):
         '''Initialize any data structures or variables needed for keeping track
         of the tasty bits we find in the log we are parsing.'''
-        self.size = 0
-        self.enqueued = 0
-        self.full = 0
-        self.maxqsize = 0
+        self.values = dict(size=None, enqueued=None, full=None, maxqsize=None)
 
         # Regular expression for matching lines we are interested in, and capturing
         # fields from the line
@@ -36,10 +33,10 @@ class RsyslogLogster(LogsterParser):
             regMatch = re.match(line)
 
             if regMatch:
-                self.size = line[0]
-                self.enqueued = line[1]
-                self.full = line[2]
-                self.maxqsize = line[3]
+                self.values['size'] = regMatch[0]
+                self.values['enqueued'] = regMatch[1]
+                self.values['full'] = regMatch[2]
+                self.values['maxqsize'] = regMatch[3]
 
         except Exception, e:
             raise LogsterParsingException, "regmatch or contents failed with %s" % e
@@ -50,9 +47,5 @@ class RsyslogLogster(LogsterParser):
         and return a list of metric objects.'''
 
         # Return a list of metrics objects
-        return [
-                MetricObject("size", self.size, "Size of the queue"),
-                MetricObject("enqueued", self.enqueued, "Total message enqueued in the queue"),
-                MetricObject("full", self.full, "Number of times queue was full"),
-                MetricObject("maxqsize", self.size, "Max size of the queue"),
-        ]
+
+       return [ MetricObject(name, value, "None") for (name,value) in self.values.items() if value]

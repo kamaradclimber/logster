@@ -30,7 +30,7 @@ class RsyslogLogster(LogsterParser):
 
         try:
             # Apply regular expression to each line and extract interesting bits.
-            regMatch = re.match(line)
+            regMatch = self.reg.match(line)
 
             if regMatch:
                 match = regMatch.groups()

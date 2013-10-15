@@ -21,7 +21,7 @@ class RsyslogLogster(LogsterParser):
         # Regular expression for matching lines we are interested in, and capturing
         # fields from the line
         #self.reg = re.compile('^\[[^]]+\] \[(?P<loglevel>\w+)\] .*')
-        self.reg = re.compile('.*rsyslogd-pstats: main Q: size=(\d+) enqueued=(\d+) full=(\d+) maxqsize=(\d+)')
+        self.reg = re.compile('.*rsyslogd-pstats: main Q: size=(\d+) enqueued=(\d+) full=(\d+) discarded.nf=(\d+) maxqsize=(\d+)')
 
 
     def parse_line(self, line):
@@ -37,7 +37,8 @@ class RsyslogLogster(LogsterParser):
                 self.values['size'] = match[0]
                 self.values['enqueued'] = match[1]
                 self.values['full'] = match[2]
-                self.values['maxqsize'] = match[3]
+                self.values['discarded.nf'] = match[3]
+                self.values['maxqsize'] = match[4]
             else:
                 raise "No match"
 

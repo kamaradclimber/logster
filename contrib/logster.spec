@@ -1,14 +1,14 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           logster
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        Parse log files, generate metrics for Graphite and Ganglia
 
 Group:          Applications/System
 License:        GPLv3
-URL:            https://github.com/etsy/logster
-Source0:        https://github.com/etsy/logster/archive/master.tar.gz
+URL:            https://github.com/kamaradclimber/logster
+Source0:        https://github.com/kamaradclimber/logster/archive/%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -22,7 +22,7 @@ your application/system/error logs.
 
 
 %prep
-%setup -q -n logster-master
+%setup -q -n %{name}-%{version}
 
 
 %build

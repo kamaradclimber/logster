@@ -16,12 +16,13 @@ class RsyslogLogster(LogsterParser):
     def __init__(self, option_string=None):
         '''Initialize any data structures or variables needed for keeping track
         of the tasty bits we find in the log we are parsing.'''
-        self.values = dict(size=None, enqueued=None, full=None, maxqsize=None)
+        self.values = dict()
 
         # Regular expression for matching lines we are interested in, and capturing
         # fields from the line
-        #self.reg = re.compile('^\[[^]]+\] \[(?P<loglevel>\w+)\] .*')
-        self.reg = re.compile('.*rsyslogd-pstats: main Q: size=(\d+) enqueued=(\d+) full=(\d+) discarded.full=(\d+) discarded.nf=(\d+) maxqsize=(\d+)')
+        #self.reg = re.compile('.*rsyslogd-pstats: main Q: size=(\d+) enqueued=(\d+) full=(\d+) discarded.full=(\d+) discarded.nf=(\d+) maxqsize=(\d+)')
+        self.reg_check = re.compile('.*rsyslogd-pstats: ([\w\s]+):')
+        self.reg = re.compile('([\w\.]+)=(\d+)')
 
 
     def parse_line(self, line):
@@ -30,15 +31,14 @@ class RsyslogLogster(LogsterParser):
 
         try:
             # Apply regular expression to each line and extract interesting bits.
-            regMatch = self.reg.match(line)
+            rsyslog = self.reg_check.match(line)
+            regMatch = self.reg.findall(line)
 
-            if regMatch:
-                match = regMatch.groups()
-                self.values['size'] = match[0]
-                self.values['enqueued'] = match[1]
-                self.values['full'] = match[2]
-                self.values['discarded.nf'] = match[3]
-                self.values['maxqsize'] = match[4]
+            if rsyslog and regMatch:
+                queue = re.sub(r"[\s\.]","", rsyslog.groups()[0])
+                for name,value in regMatch:
+                    metric = queue + '.' + re.sub(r'\.', '', name)
+                self.values[metric] = value
             else:
                 raise "No match"
 

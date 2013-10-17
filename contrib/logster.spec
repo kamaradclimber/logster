@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           logster
-Version:        0.0.5
+Version:        0.0.6
 Release:        1%{?dist}
 Summary:        Parse log files, generate metrics for Graphite and Ganglia
 

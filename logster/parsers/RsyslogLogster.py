@@ -35,10 +35,10 @@ class RsyslogLogster(LogsterParser):
             regMatch = self.reg.findall(line)
 
             if rsyslog and regMatch:
-                queue = re.sub(r"[\s\.]","", rsyslog.groups()[0])
+                queue = re.sub(r"[\s\.]","", rsyslog.groups()[0]).lower()
                 for name,value in regMatch:
                     metric = queue + '.' + re.sub(r'\.', '', name)
-                self.values[metric] = value
+                    self.values[metric] = value
             else:
                 raise "No match"
 

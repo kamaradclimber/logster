@@ -81,6 +81,11 @@ Additional usage details can be found with the -h option:
 
     Options:
       -h, --help            show this help message and exit
+      --logtail=LOGTAIL     Specify location of logtail.  Default
+                            /usr/sbin/logtail2
+      --logfilename         Specify the file logster uses to log. Default logster.log
+      --logsizerotation     Specify the size at which the log file will be rotated
+                            (in bytes). Default 100MB
       -p METRIC_PREFIX, --metric-prefix=METRIC_PREFIX
                             Add prefix to all published metrics. This is for
                             people that may multiple instances of same service on

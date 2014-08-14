@@ -50,8 +50,6 @@ class RsyslogLogster(LogsterParser):
                 for name,value in regMatch:
                     metric = queue + '.' + name.replace('.','')
                     self.values[metric] = value
-            else:
-                raise Exception("No match")
 
         except Exception, e:
             raise LogsterParsingException, "regmatch or contents failed with %s" % e

@@ -18,7 +18,7 @@ class RsyslogLogster(LogsterParser):
         '''Initialize any data structures or variables needed for keeping track
         of the tasty bits we find in the log we are parsing.'''
         self.whitelist = None
-        if not option_string is None:
+        if not (option_string is None or len(option_string) ==0):
             parser = optparse.OptionParser()
             options = option_string.split(' ')
             parser.add_option("--whitelist", "-w", dest='whitelist', default='',

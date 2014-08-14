@@ -19,3 +19,9 @@ class TestRsyslogParser(unittest.TestCase):
         self.assertEquals(2, len(names))
         self.assertTrue('foo' in names)
         self.assertTrue('bar' in names)
+
+    def test_empty_parseroptions_should_work(self):
+        parser = RsyslogLogster(option_string="")
+        line = "2014-08-14T09:10:42.716176+00:00 fc rsyslogd-pstats: foo: processed=0 failed=0"
+        parser.parse_line(line)
+        self.assertEqual(2, len(parser.values))

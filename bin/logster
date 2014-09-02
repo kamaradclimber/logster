@@ -172,19 +172,23 @@ def lineno():
 
 def submit_stats(parser, duration, options):
     metrics = parser.get_state(duration)
+    try:
+        if 'ganglia' in options.output:
+            submit_ganglia(metrics, options)
+        if 'graphite' in options.output:
+            submit_graphite(metrics, options)
+        if 'stdout' in options.output:
+            submit_stdout(metrics, options)
+        if 'cloudwatch' in options.output:
+            submit_cloudwatch(metrics, options)
+        if 'nsca' in options.output:
+            submit_nsca(metrics, options)
+        if 'statsd' in options.output:
+            submit_statsd(metrics, options)
+    except:
+        e = sys.exc_info()[0]
+        logger.error("Error while submitting metrics: %s" % e)
 
-    if 'ganglia' in options.output:
-        submit_ganglia(metrics, options)
-    if 'graphite' in options.output:
-        submit_graphite(metrics, options)
-    if 'stdout' in options.output:
-        submit_stdout(metrics, options)
-    if 'cloudwatch' in options.output:
-        submit_cloudwatch(metrics, options)
-    if 'nsca' in options.output:
-        submit_nsca(metrics, options)
-    if 'statsd' in options.output:
-        submit_statsd(metrics, options)
 
 
 def submit_stdout(metrics, options):

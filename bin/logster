@@ -102,6 +102,8 @@ cmdline.add_option('--nsca-host', action='store',
 cmdline.add_option('--nsca-service-hostname', action='store',
                     help='<host_name> value to use in nsca passive service check. Default is \"%default\"',
                     default=socket.gethostname())
+cmdline.add_option('--connect-timeout', action='store', default=socket.getdefaulttimeout(), dest="connect_timeout",
+                    help='Timeout to establish connections')
 cmdline.add_option('--state-dir', '-s', action='store', default=state_dir,
                     help='Where to store the logtail state file.  Default location %s' % state_dir)
 cmdline.add_option('--output', '-o', action='append',
@@ -219,8 +221,7 @@ def submit_graphite(metrics, options):
 
     if (not options.dry_run):
         host = options.graphite_host.split(':')
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((host[0], int(host[1])))
+        s = socket.create_connection((host[0], int(host[1]), options.connect_timeout)
 
     try:
         for metric in metrics:
